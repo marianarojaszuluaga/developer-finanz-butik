@@ -11,6 +11,13 @@ import type { Project } from "@/types/api";
 
 const steps = ["Basic Info", "Financial Details", "Media & Documents", "Review"];
 
+const categoryDescriptions: Record<Project["category"], string> = {
+  cash: "Cash — Aporte de capital líquido con horizonte corto y enfoque en rendimientos rápidos.",
+  lend: "Lend — Financiamiento vía deuda; el inversionista presta capital y recibe intereses.",
+  buy: "Buy — Compra de un activo existente ya en operación.",
+  develop: "Develop — Financiamiento de un proyecto en construcción o desarrollo desde cero.",
+};
+
 const UploadWizard = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);

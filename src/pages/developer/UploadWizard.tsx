@@ -107,16 +107,6 @@ const UploadWizard = () => {
               <p className="text-xs text-muted-foreground">
                 {categoryDescriptions[form.category]}
               </p>
-
-              <div className="mt-3 rounded-lg border border-border bg-muted/30 p-3 space-y-2">
-                <p className="text-xs font-semibold text-foreground">¿Qué significa cada categoría?</p>
-                <ul className="space-y-1.5 text-xs text-muted-foreground">
-                  <li><span className="font-medium text-foreground">Cash:</span> Oportunidades de liquidez de corto plazo. El inversionista aporta capital disponible para obtener rendimientos rápidos con bajo riesgo.</li>
-                  <li><span className="font-medium text-foreground">Lend:</span> Préstamos o financiamiento de deuda. El inversionista presta capital al proyecto y recibe pagos periódicos de interés con devolución del principal.</li>
-                  <li><span className="font-medium text-foreground">Buy:</span> Adquisición de activos ya existentes (inmuebles, complejos, participaciones). El inversionista compra una porción del activo en operación.</li>
-                  <li><span className="font-medium text-foreground">Develop:</span> Proyectos de desarrollo o construcción desde cero. El capital financia la creación del activo y los retornos provienen de su venta o renta futura.</li>
-                </ul>
-              </div>
             </div>
             <div className="space-y-2">
               <Label>Description</Label>

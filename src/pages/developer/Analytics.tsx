@@ -1,5 +1,5 @@
 import { developerAnalytics } from "@/data/mockAnalytics";
-import { CurrencyDollar, Users, ChartBar, TrendUp } from "@phosphor-icons/react";
+import { CurrencyDollar, Users, ChartBar } from "@phosphor-icons/react";
 
 const fmt = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
 
@@ -11,12 +11,11 @@ const Analytics = () => {
       <h1 className="font-heading text-2xl font-bold text-foreground">Analytics</h1>
 
       {/* KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {[
           { label: "Total Raised", value: fmt(a.totalRaised), icon: CurrencyDollar },
           { label: "Active Projects", value: String(a.activeProjects), icon: ChartBar },
           { label: "Total Investors", value: String(a.totalInvestors), icon: Users },
-          { label: "Avg Return", value: `${a.avgReturn}%`, icon: TrendUp },
         ].map((c) => (
           <div key={c.label} className="rounded-xl border border-border bg-card p-5">
             <div className="flex items-center gap-2 text-muted-foreground">

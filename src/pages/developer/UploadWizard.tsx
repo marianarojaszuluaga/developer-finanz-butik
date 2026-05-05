@@ -129,11 +129,11 @@ const UploadWizard = () => {
                 <Input value={form.termRange} onChange={(e) => update("termRange", e.target.value)} placeholder="1 - 5 years" />
               </div>
               <div className="space-y-2">
-                <Label>Interest Rate Min (%)</Label>
+                <Label>Target Return Min (%)</Label>
                 <Input type="number" step="0.1" value={form.interestMin} onChange={(e) => update("interestMin", e.target.value)} placeholder="6.5" />
               </div>
               <div className="space-y-2">
-                <Label>Interest Rate Max (%)</Label>
+                <Label>Target Return Max (%)</Label>
                 <Input type="number" step="0.1" value={form.interestMax} onChange={(e) => update("interestMax", e.target.value)} placeholder="8.5" />
               </div>
             </div>
@@ -175,7 +175,7 @@ const UploadWizard = () => {
                 ["Title", form.title || "—"],
                 ["Category", form.category],
                 ["Min Investment", form.minInvestment ? `$${form.minInvestment}` : "—"],
-                ["Interest Range", form.interestMin && form.interestMax ? `${form.interestMin}% – ${form.interestMax}%` : "—"],
+                ["Target Return", form.interestMin && form.interestMax ? `${form.interestMin}% – ${form.interestMax}%` : "—"],
                 ["Term", form.termRange || "—"],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-border pb-2">

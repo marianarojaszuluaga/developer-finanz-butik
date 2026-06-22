@@ -1,55 +1,13 @@
-export type InquiryStatus = "active" | "resolved" | "pending_response";
-
-export interface VendorInfoCard {
-  firmName: string;
-  category: string;
-  licenseNumber: string;
-  verified: boolean;
-  avatarUrl?: string;
-}
-
-export interface MessageAttachment {
-  id: string;
-  name: string;
-  type: "pdf" | "docx" | "image" | "other";
-  size: string;
-  url: string;
-}
-
-export interface ThreadMessage {
-  id: string;
-  senderId: string;
-  senderName: string;
-  senderRole: "vendor" | "investor" | "admin";
-  body: string;
-  attachments: MessageAttachment[];
-  sentAt: string;
-}
-
-export interface Inquiry {
-  id: string;
-  subject: string;
-  serviceTitle: string;
-  serviceCategory: string;
-  status: InquiryStatus;
-  lastMessageAt: string;
-  lastMessagePreview: string;
-  unreadCount: number;
-  counterparty: {
-    name: string;
-    role: "investor" | "vendor";
-    company?: string;
-  };
-  vendorInfo: VendorInfoCard;
-  messages: ThreadMessage[];
-}
+export type { InquiryStatus, Inquiry, ThreadMessage, MessageAttachment } from "@/types/api";
+import type { Inquiry } from "@/types/api";
 
 export const mockInquiries: Inquiry[] = [
   {
     id: "inq-1",
     subject: "Due Diligence – Lote Industrial Querétaro",
+    serviceId: "vs-1",
     serviceTitle: "Real Estate Due Diligence",
-    serviceCategory: "Legal Incorporation and Filings",
+    serviceCategory: "Legal",
     status: "active",
     lastMessageAt: "2026-03-08T14:32:00Z",
     lastMessagePreview: "Attached the updated title report for Lot 14-B. Please review the lien section on page 12.",
@@ -145,8 +103,9 @@ export const mockInquiries: Inquiry[] = [
   {
     id: "inq-2",
     subject: "Tax Structuring – Multi-jurisdictional Holdings",
+    serviceId: "vs-2",
     serviceTitle: "Tax Optimization Strategy",
-    serviceCategory: "Accounting, Taxes, and Compliance",
+    serviceCategory: "Taxes",
     status: "pending_response",
     lastMessageAt: "2026-03-07T10:05:00Z",
     lastMessagePreview: "We'd like to explore a holding structure between Mexico and the US for our new REIT vehicle.",
@@ -177,8 +136,9 @@ export const mockInquiries: Inquiry[] = [
   {
     id: "inq-3",
     subject: "Annual Audit – RE Fund III",
+    serviceId: "vs-3",
     serviceTitle: "Fund Audit & Compliance Report",
-    serviceCategory: "Accounting, Taxes, and Compliance",
+    serviceCategory: "Accounting",
     status: "resolved",
     lastMessageAt: "2026-02-28T17:00:00Z",
     lastMessagePreview: "Final audit report delivered. Thank you for a smooth process this year.",

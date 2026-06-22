@@ -1,21 +1,9 @@
-export type ServiceStatus = "pending_approval" | "active" | "inactive";
-
-export interface VendorService {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  pricingModel: string;
-  fee: number;
-  currency: string;
-  status: ServiceStatus;
-  views: number;
-  createdAt: string;
-}
+import type { VendorService, VendorProfile } from "@/types/api";
 
 export let mockVendorServices: VendorService[] = [
   {
     id: "vs-1",
+    vendorId: "ven-1",
     title: "Real Estate Due Diligence",
     description: "Comprehensive legal review of property titles, liens, and zoning compliance for investment-grade real estate.",
     category: "Legal",
@@ -25,9 +13,11 @@ export let mockVendorServices: VendorService[] = [
     status: "active",
     views: 142,
     createdAt: "2025-11-15",
+    updatedAt: "2026-01-10",
   },
   {
     id: "vs-2",
+    vendorId: "ven-1",
     title: "Tax Optimization Strategy",
     description: "Cross-border tax planning and structuring advisory for HNW investors with multi-jurisdictional holdings.",
     category: "Taxes",
@@ -37,9 +27,11 @@ export let mockVendorServices: VendorService[] = [
     status: "active",
     views: 98,
     createdAt: "2025-12-03",
+    updatedAt: "2026-02-20",
   },
   {
     id: "vs-3",
+    vendorId: "ven-1",
     title: "Fund Audit & Compliance Report",
     description: "Annual audit preparation and compliance reporting for real estate investment funds.",
     category: "Accounting",
@@ -49,6 +41,7 @@ export let mockVendorServices: VendorService[] = [
     status: "pending_approval",
     views: 0,
     createdAt: "2026-03-01",
+    updatedAt: "2026-03-01",
   },
 ];
 
@@ -67,7 +60,9 @@ export const vendorAnalytics = {
   ],
 };
 
-export const vendorProfile = {
+export const vendorProfile: VendorProfile = {
+  id: "vp-1",
+  userId: "ven-1",
   firmName: "Ruiz & Asociados Legal",
   category: "Legal",
   bio: "Boutique law firm specializing in cross-border real estate transactions and investment structuring across Latin America.",

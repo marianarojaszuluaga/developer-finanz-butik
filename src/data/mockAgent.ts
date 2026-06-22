@@ -1,5 +1,8 @@
-export const agentProfile = {
+import type { AgentProfile, PendingAttribution } from "@/types/api";
+
+export const agentProfile: AgentProfile = {
   id: "agt-1",
+  userId: "agt-1",
   name: "Sofía Torres",
   company: "Torres Capital Partners",
   email: "sofia@agentpro.com",
@@ -7,7 +10,7 @@ export const agentProfile = {
   agentCode: "FB-2026-XYZ",
   avatar: "",
   tcAccepted: true,
-  status: "active" as const,
+  status: "active",
 };
 
 export const agentStats = {
@@ -18,12 +21,12 @@ export const agentStats = {
   conversionRate: 25.5,
 };
 
-export const pendingAttributions = [
-  { id: "attr-1", investorName: "Luis García", project: "Villa Costa del Sol", amount: 50_000, date: "2026-02-28", status: "pending" as const },
-  { id: "attr-2", investorName: "Ana Martínez", project: "Fondo Deuda Latam", amount: 25_000, date: "2026-03-01", status: "pending" as const },
-  { id: "attr-3", investorName: "Roberto Díaz", project: "Riviera Maya", amount: 100_000, date: "2026-03-05", status: "pending" as const },
-  { id: "attr-4", investorName: "Carmen Vega", project: "Villa Costa del Sol", amount: 75_000, date: "2026-03-08", status: "pending" as const },
-  { id: "attr-5", investorName: "Pedro Sánchez", project: "Fondo Deuda Latam", amount: 30_000, date: "2026-03-10", status: "pending" as const },
+export const pendingAttributions: PendingAttribution[] = [
+  { id: "attr-1", investorName: "Luis García", projectId: "1", projectTitle: "Villa Residencial Costa del Sol", amount: 50_000, date: "2026-02-28", status: "pending" },
+  { id: "attr-2", investorName: "Ana Martínez", projectId: "3", projectTitle: "Fondo de Deuda Corporativa Latam", amount: 25_000, date: "2026-03-01", status: "pending" },
+  { id: "attr-3", investorName: "Roberto Díaz", projectId: "2", projectTitle: "Complejo Turístico Riviera Maya", amount: 100_000, date: "2026-03-05", status: "pending" },
+  { id: "attr-4", investorName: "Carmen Vega", projectId: "1", projectTitle: "Villa Residencial Costa del Sol", amount: 75_000, date: "2026-03-08", status: "pending" },
+  { id: "attr-5", investorName: "Pedro Sánchez", projectId: "3", projectTitle: "Fondo de Deuda Corporativa Latam", amount: 30_000, date: "2026-03-10", status: "pending" },
 ];
 
 export const agentCodeUsageWeekly = [
@@ -45,10 +48,10 @@ export const agentCodeUsageMonthly = [
 ];
 
 export const topProjectsByReferral = [
-  { project: "Villa Costa del Sol", referrals: 18, commissions: 12_400, category: "buy" as const },
-  { project: "Fondo Deuda Latam", referrals: 14, commissions: 9_800, category: "lend" as const },
-  { project: "Riviera Maya", referrals: 10, commissions: 8_200, category: "develop" as const },
-  { project: "Cash Plus MXN", referrals: 5, commissions: 4_120, category: "cash" as const },
+  { projectId: "1", project: "Villa Residencial Costa del Sol", referrals: 18, commissions: 12_400, category: "develop" as const },
+  { projectId: "3", project: "Fondo de Deuda Corporativa Latam", referrals: 14, commissions: 9_800, category: "lend" as const },
+  { projectId: "2", project: "Complejo Turístico Riviera Maya", referrals: 10, commissions: 8_200, category: "buy" as const },
+  { projectId: "4", project: "Cash Plus MXN", referrals: 5, commissions: 4_120, category: "cash" as const },
 ];
 
 export const mediaKitItems = [

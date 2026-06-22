@@ -1,6 +1,6 @@
 # Finanz Butik® — Investment Marketplace Platform
 
-> **Curated real-estate and alternative investment marketplace** that connects Investors with Developers, featuring project discovery, portfolio management, return simulation, and white-label client management.
+> **Curated real-estate and alternative investment marketplace** that connects Investors, Developers, Vendors (service providers), and Agents. Features project discovery, portfolio management, return simulation, vendor services marketplace, white-label client management, and agent referral tracking.
 
 ---
 
@@ -40,47 +40,65 @@ Button radius: `8px` · Container max-width: `1400px`
 
 ```
 src/
-├── assets/                   # Static images (hero, generated)
+├── assets/                    # Static images (hero, generated)
 ├── components/
-│   ├── ui/                   # shadcn/ui primitives (button, card, dialog…)
-│   ├── Navbar.tsx            # Global nav — auth-aware, role-aware
-│   ├── HeroSection.tsx       # Landing hero with CTA
-│   ├── SuccessCases.tsx      # Project grid with category filters
-│   ├── ProjectCard.tsx       # Reusable project card
-│   ├── DeveloperSidebar.tsx  # Dashboard sidebar (Dev + Manager sections)
-│   ├── NavLink.tsx           # Active-aware nav link
-│   └── ProtectedRoute.tsx    # Role-based route guard
+│   ├── ui/                    # shadcn/ui primitives (button, card, dialog…)
+│   ├── Navbar.tsx             # Global nav — auth-aware, role-aware
+│   ├── HeroSection.tsx        # Landing hero with CTA
+│   ├── SuccessCases.tsx       # Project grid with category filters
+│   ├── ProjectCard.tsx        # Reusable project card
+│   ├── DeveloperSidebar.tsx   # Dashboard sidebar (Developer + Manager)
+│   ├── VendorSidebar.tsx      # Dashboard sidebar (Vendor)
+│   ├── AgentSidebar.tsx       # Dashboard sidebar (Agent)
+│   ├── NavLink.tsx            # Active-aware nav link
+│   └── ProtectedRoute.tsx     # Role-based route guard
 ├── contexts/
-│   └── AuthContext.tsx        # Mock auth (investor | developer)
+│   └── AuthContext.tsx         # Mock auth (investor | developer | vendor | agent)
 ├── data/
-│   ├── mockProjects.ts        # Mutable project list
-│   ├── mockPortfolio.ts       # Investor portfolio data
-│   ├── mockClients.ts         # Managed clients + brand config
-│   └── mockAnalytics.ts       # Developer KPIs
+│   ├── mockProjects.ts         # Project inventory (typed with Project from api.ts)
+│   ├── mockPortfolio.ts        # Investor portfolio (PortfolioItem, PortfolioSummary)
+│   ├── mockClients.ts          # Managed clients + brand config
+│   ├── mockAnalytics.ts        # Developer KPIs and analytics
+│   ├── mockVendor.ts           # Vendor services, profile, analytics
+│   ├── mockMessaging.ts        # Inquiry threads and messages
+│   └── mockAgent.ts            # Agent profile, stats, attributions
 ├── hooks/
-│   └── use-toast.ts           # Toast notification hook
+│   └── use-toast.ts            # Toast notification hook
 ├── pages/
-│   ├── Index.tsx              # Landing (Navbar + Hero + SuccessCases)
-│   ├── ProjectSheet.tsx       # Full project detail + simulator
-│   ├── Portfolio.tsx          # Investor portfolio dashboard
-│   ├── Learn.tsx              # Educational content hub
-│   ├── Login.tsx              # Role selection (mock auth)
-│   ├── NotFound.tsx           # 404
-│   └── developer/
-│       ├── DeveloperLayout.tsx # Sidebar layout wrapper
-│       ├── MyProjects.tsx      # Project list management
-│       ├── UploadWizard.tsx    # 4-step project creation
-│       ├── Analytics.tsx       # KPIs + charts
-│       └── Profile.tsx         # KYC / profile settings
-│   └── manager/
-│       ├── Clients.tsx         # Client CRM table
-│       ├── BrandSettings.tsx   # White-label config
-│       └── Reports.tsx         # Report generation
+│   ├── Index.tsx               # Landing (Navbar + Hero + SuccessCases)
+│   ├── ProjectSheet.tsx        # Full project detail + simulator
+│   ├── Portfolio.tsx           # Investor portfolio dashboard
+│   ├── Learn.tsx               # Educational content hub
+│   ├── Login.tsx               # Role selection (mock auth)
+│   ├── NotFound.tsx            # 404
+│   ├── developer/
+│   │   ├── DeveloperLayout.tsx # Sidebar layout wrapper
+│   │   ├── MyProjects.tsx      # Project list management
+│   │   ├── UploadWizard.tsx    # 4-step project creation
+│   │   ├── Analytics.tsx       # KPIs + charts
+│   │   └── Profile.tsx         # KYC / profile settings
+│   ├── manager/
+│   │   ├── Clients.tsx         # Client CRM table
+│   │   ├── BrandSettings.tsx   # White-label config
+│   │   └── Reports.tsx         # Report generation
+│   ├── vendor/
+│   │   ├── VendorLayout.tsx    # Sidebar layout wrapper
+│   │   ├── VendorDashboard.tsx # Service overview
+│   │   ├── CreateService.tsx   # New service form
+│   │   ├── VendorAnalytics.tsx # Revenue + views metrics
+│   │   ├── VendorProfileSetup.tsx # Firm profile / KYB
+│   │   ├── MessagingHub.tsx    # Inquiry list
+│   │   └── MessageThread.tsx   # Conversation detail
+│   └── agent/
+│       ├── AgentLayout.tsx     # Sidebar layout wrapper
+│       ├── AgentDashboard.tsx  # Commissions + referral code
+│       ├── AgentAnalytics.tsx  # Referral metrics + top projects
+│       └── AgentProfileSetup.tsx # Agent profile / T&C
 ├── services/
-│   └── api.ts                 # API service class (fetch wrapper)
+│   └── api.ts                  # API service class (fetch wrapper)
 ├── types/
-│   └── api.ts                 # TypeScript interfaces (Project, Tier, etc.)
-└── App.tsx                    # Route definitions + providers
+│   └── api.ts                  # All shared TypeScript interfaces
+└── App.tsx                     # Route definitions + providers
 ```
 
 ### State Management
@@ -99,22 +117,33 @@ src/
 | `/portfolio` | Portfolio | Auth (any) |
 | `/learn` | Learn | Auth (any) |
 | `/login` | Login | Public |
-| `/developer` | DeveloperLayout > MyProjects | Developer only |
-| `/developer/upload` | UploadWizard | Developer only |
-| `/developer/analytics` | Analytics | Developer only |
-| `/developer/profile` | Profile | Developer only |
-| `/developer/clients` | Clients | Developer only |
-| `/developer/brand` | BrandSettings | Developer only |
-| `/developer/reports` | Reports | Developer only |
+| `/developer` | DeveloperLayout > MyProjects | Developer |
+| `/developer/upload` | UploadWizard | Developer |
+| `/developer/analytics` | Analytics | Developer |
+| `/developer/profile` | Profile | Developer |
+| `/developer/clients` | Clients | Developer |
+| `/developer/brand` | BrandSettings | Developer |
+| `/developer/reports` | Reports | Developer |
+| `/vendor` | VendorLayout > VendorDashboard | Vendor |
+| `/vendor/create` | CreateService | Vendor |
+| `/vendor/analytics` | VendorAnalytics | Vendor |
+| `/vendor/profile` | VendorProfileSetup | Vendor |
+| `/vendor/messages` | MessagingHub | Vendor |
+| `/vendor/messages/:id` | MessageThread | Vendor |
+| `/agent` | AgentLayout > AgentDashboard | Agent |
+| `/agent/analytics` | AgentAnalytics | Agent |
+| `/agent/profile` | AgentProfileSetup | Agent |
 
 ---
 
 ## 3. User Roles
 
-| Role | Description | Accessible Modules |
-|------|-------------|-------------------|
+| Role | Description | Key Modules |
+|------|-------------|-------------|
 | **Investor** | Explores projects, manages portfolio, accesses educational content | Landing, Project Sheet, Portfolio, Learn |
-| **Developer** | Publishes projects, monitors analytics, manages KYC, manages clients and brand | All of the above + Developer Dashboard + Client Manager |
+| **Developer** | Publishes projects, monitors analytics, manages KYC, manages clients and white-label brand | Developer Dashboard, Client Manager |
+| **Vendor** | Offers professional services (legal, tax, accounting), manages inquiries | Vendor Dashboard, Messaging |
+| **Agent** | Refers investors via personal code, tracks commissions and attributions | Agent Dashboard, Analytics |
 
 > Auth is currently mock-based (`AuthContext`). Routes are guarded by `ProtectedRoute` with `allowedRoles` prop.
 
@@ -128,15 +157,16 @@ src/
 - Status badges (Active, Sold Out, Coming Soon, Waiting Approval)
 
 ### Module B: Project Sheet
-- Image gallery mosaic (5 images)
+- Image gallery mosaic (up to 5 images)
 - Project stats (term, rates, min investment)
 - "Curated by" attribution with legal support badge
 - **Return Simulator**: Investment amount × years → projected value with chart
-- Investment Tiers table (multi-tier, multi-range)
+- Investment Tiers table (multi-tier, multi-range by amount)
 - Documents section with download
+- BUY projects: extended property details panel (`buyDetails`)
 
 ### Module C: Investor Portfolio
-- Summary cards (Total Invested, Current Value, Return %, Active)
+- Summary cards (Total Invested, Current Value, Return %, Active count)
 - Portfolio growth chart (SVG line chart)
 - Holdings table with status badges and return indicators
 
@@ -147,34 +177,84 @@ src/
 
 ### Module E: Developer Dashboard
 - **My Projects**: List with status tags, view/edit actions, "New Project" CTA
-- **Upload Wizard**: 4-step form (Basic Info → Financials → Media → Review) → toast + redirect
+- **Upload Wizard**: 4-step form (Basic Info → Financials → Media → Review) with BUY-mode branch
 - **Analytics**: KPI cards + monthly bar chart + project performance progress bars
 - **Profile/KYC**: Personal info, company details, document upload slots
 
 ### Module F: Client Manager (White-Label)
-- **Clients CRM**: Searchable table (name, invested, deals, risk profile, activity)
+- **Clients CRM**: Searchable table (name, invested, deals, risk profile, last activity)
 - **Brand Settings**: Company name, color picker, custom domain, logo upload, live preview
 - **Reports**: AUM summary, report template list with generate/download
 
+### Module G: Vendor Services
+- **Dashboard**: Active services list with views, fee, and status
+- **Create Service**: Form to publish a new professional service
+- **Analytics**: Revenue chart, views, pending payouts
+- **Profile/KYB**: Firm details, license number, bank account configuration
+- **Messaging**: Inbox of investor inquiries per service with full thread view and file attachments
+
+### Module H: Agent Referrals
+- **Dashboard**: Referral code card, commission totals, pending attributions table
+- **Analytics**: Code usage chart (weekly/monthly), top projects by referral, conversion rate
+- **Profile Setup**: Agent details, T&C acceptance
+
 ---
 
-## 5. Data Models (TypeScript Interfaces)
+## 5. Data Model
+
+`src/types/api.ts` is the **single source of truth** for all shared interfaces. Mock data files import from there.
+
+### Key type aliases
+
+```typescript
+type ProjectCategory = "cash" | "lend" | "buy" | "develop"
+type ProjectStatus   = "active" | "sold_out" | "coming_soon" | "waiting_approval"
+type RiskProfile     = "conservative" | "moderate" | "aggressive"
+type InquiryStatus   = "active" | "resolved" | "pending_response"
+type AttachmentType  = "pdf" | "docx" | "image" | "other"
+```
+
+### Core interfaces
 
 ```typescript
 Project {
-  id, title, slug, status, category, thumbnailUrl, images[],
-  termRange, annualInterestRateMin, annualInterestRateMax,
+  id, title, slug, status: ProjectStatus, category: ProjectCategory,
+  thumbnailUrl, images[], termRange,
+  annualInterestRateMin, annualInterestRateMax,
   minInvestment, currency, description, highlights[],
-  curatedBy, legalSupport, tiers[], documents[], createdAt, updatedAt
+  curatedBy, legalSupport, tiers: InvestmentTier[], documents: ProjectDocument[],
+  buyDetails?: BuyDetails, createdAt, updatedAt
 }
 
-InvestmentTier { id, name, years, ranges: TierRange[] }
-TierRange { minAmount, maxAmount, interestRate }
+InvestmentTier  { id, name, years, ranges: TierRange[] }
+TierRange       { minAmount, maxAmount: number | null, interestRate }
 ProjectDocument { id, name, date, downloadUrl }
-SimulatorResult { investmentAmount, projectedValue, gain, gainPercentage, years, chartData[] }
-PortfolioItem { id, projectName, category, invested, currentValue, returnRate, status, dates }
-ManagedClient { id, name, email, totalInvested, activeDeals, riskProfile, lastActivity }
+BuyDetails      { purchasePrice?, equitySought?, estimatedAnnualYield?, noi?,
+                  occupancyRate?, unitsOrArea?, propertyAddress?,
+                  assetType?, yearBuilt?, exitStrategy? }
+
+PortfolioItem   { id, projectId, projectName, category: ProjectCategory,
+                  invested, currentValue, returnRate, status, startDate, endDate }
+PortfolioSummary { totalInvested, currentValue, totalReturn, activeInvestments, chartData[] }
+
+VendorService   { id, vendorId, title, description, category, pricingModel,
+                  fee, currency, status, views, createdAt, updatedAt }
+VendorProfile   { id, userId, firmName, category, bio, taxId, licenseNumber,
+                  verified, bankConfigured, balance, payoutHistory[] }
+
+Inquiry         { id, subject, serviceId, serviceTitle, serviceCategory,
+                  status: InquiryStatus, counterparty, vendorInfo, messages[] }
+ThreadMessage   { id, senderId, senderName, senderRole, body, attachments[], sentAt }
+MessageAttachment { id, name, type: AttachmentType, size, url }
+
+AgentProfile    { id, userId, name, company, email, bio, agentCode,
+                  avatar, tcAccepted, status }
+PendingAttribution { id, investorName, projectId, projectTitle, amount, date, status }
 ```
+
+> All cross-entity references use IDs (`projectId`, `vendorId`, `serviceId`, `userId`) — never bare name strings — to prepare for backend integration.
+
+See [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) for the full model reference with relationship diagram.
 
 ---
 

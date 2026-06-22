@@ -26,9 +26,55 @@ const UploadWizard = () => {
     title: "", category: "develop" as Project["category"], description: "",
     minInvestment: "", interestMin: "", interestMax: "", termRange: "",
     highlights: "",
+    // BUY-specific fields
+    purchasePrice: "",
+    estimatedAnnualYield: "",
+    noi: "",
+    occupancyRate: "",
+    unitsOrArea: "",
+    propertyAddress: "",
+    assetType: "",
+    yearBuilt: "",
+    exitStrategy: "",
   });
 
   const update = (key: string, val: string) => setForm((f) => ({ ...f, [key]: val }));
+
+  const validateStep = (s: number) => {
+    // All fields required per user's request
+    if (s === 0) {
+      if (!form.title) return false;
+      if (!form.category) return false;
+      if (!form.description) return false;
+      if (form.category === "buy") {
+        if (!form.assetType) return false;
+        if (!form.propertyAddress) return false;
+        if (!form.yearBuilt) return false;
+      }
+    }
+    if (s === 1) {
+      if (!form.minInvestment) return false;
+      if (!form.highlights) return false;
+      if (form.category === "buy") {
+        if (!form.purchasePrice) return false;
+        if (!form.estimatedAnnualYield) return false;
+        if (!form.noi) return false;
+        if (!form.occupancyRate) return false;
+        if (!form.unitsOrArea) return false;
+        if (!form.exitStrategy) return false;
+      } else {
+        if (!form.termRange) return false;
+        if (!form.interestMin) return false;
+        if (!form.interestMax) return false;
+      }
+    }
+    // step 2 (media) - at least thumbnail required (we don't implement upload here), ensure placeholder check
+    if (s === 2) {
+      // Because file upload isn't implemented, require at least highlights present (already required earlier)
+      return true;
+    }
+    return true;
+  };
 
   const handleSubmit = () => {
     const newProject: Project = {
@@ -50,6 +96,18 @@ const UploadWizard = () => {
       legalSupport: true,
       tiers: [],
       documents: [],
+      buyDetails: form.category === "buy" ? {
+        purchasePrice: form.purchasePrice ? parseFloat(form.purchasePrice) : undefined,
+        equitySought: form.equitySought ? parseFloat(form.equitySought) : undefined,
+        estimatedAnnualYield: form.estimatedAnnualYield ? parseFloat(form.estimatedAnnualYield) : undefined,
+        noi: form.noi ? parseFloat(form.noi) : undefined,
+        occupancyRate: form.occupancyRate ? parseFloat(form.occupancyRate) : undefined,
+        unitsOrArea: form.unitsOrArea || undefined,
+        propertyAddress: form.propertyAddress || undefined,
+        assetType: form.assetType || undefined,
+        yearBuilt: form.yearBuilt ? parseInt(form.yearBuilt, 10) : undefined,
+        exitStrategy: form.exitStrategy || undefined,
+      } : undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -114,6 +172,24 @@ const UploadWizard = () => {
               <Label>Description</Label>
               <Textarea value={form.description} onChange={(e) => update("description", e.target.value)} rows={4} placeholder="Describe the project..." />
             </div>
+            {form.category === "buy" && (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Asset Type</Label>
+                    <Input value={form.assetType} onChange={(e) => update("assetType", e.target.value)} placeholder="Residential / Commercial / Industrial" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Property Address</Label>
+                    <Input value={form.propertyAddress} onChange={(e) => update("propertyAddress", e.target.value)} placeholder="Street, City, Country" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Year Built</Label>
+                  <Input type="number" value={form.yearBuilt} onChange={(e) => update("yearBuilt", e.target.value)} placeholder="e.g. 1998" />
+                </div>
+              </>
+            )}
           </>
         )}
 
@@ -124,19 +200,58 @@ const UploadWizard = () => {
                 <Label>Min Investment (USD)</Label>
                 <Input type="number" value={form.minInvestment} onChange={(e) => update("minInvestment", e.target.value)} placeholder="20000" />
               </div>
-              <div className="space-y-2">
-                <Label>Term Range</Label>
-                <Input value={form.termRange} onChange={(e) => update("termRange", e.target.value)} placeholder="1 - 5 years" />
-              </div>
-              <div className="space-y-2">
-                <Label>Target Return Min (%)</Label>
-                <Input type="number" step="0.1" value={form.interestMin} onChange={(e) => update("interestMin", e.target.value)} placeholder="6.5" />
-              </div>
-              <div className="space-y-2">
-                <Label>Target Return Max (%)</Label>
-                <Input type="number" step="0.1" value={form.interestMax} onChange={(e) => update("interestMax", e.target.value)} placeholder="8.5" />
-              </div>
+              {form.category !== "buy" ? (
+                <>
+                  <div className="space-y-2">
+                    <Label>Term Range</Label>
+                    <Input value={form.termRange} onChange={(e) => update("termRange", e.target.value)} placeholder="1 - 5 years" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Target Return Min (%)</Label>
+                    <Input type="number" step="0.1" value={form.interestMin} onChange={(e) => update("interestMin", e.target.value)} placeholder="6.5" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Target Return Max (%)</Label>
+                    <Input type="number" step="0.1" value={form.interestMax} onChange={(e) => update("interestMax", e.target.value)} placeholder="8.5" />
+                  </div>
+                </>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Purchase Price (USD)</Label>
+                    <Input type="number" value={form.purchasePrice} onChange={(e) => update("purchasePrice", e.target.value)} placeholder="e.g. 1000000" />
+                  </div>
+                </div>
+              )}
             </div>
+            {form.category === "buy" && (
+              <div className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Estimated Annual Yield / Cap Rate (%)</Label>
+                    <Input type="number" step="0.1" value={form.estimatedAnnualYield} onChange={(e) => update("estimatedAnnualYield", e.target.value)} placeholder="e.g. 6.5" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Net Operating Income (NOI)</Label>
+                    <Input type="number" value={form.noi} onChange={(e) => update("noi", e.target.value)} placeholder="e.g. 65000" />
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Occupancy Rate (%)</Label>
+                    <Input type="number" step="0.1" value={form.occupancyRate} onChange={(e) => update("occupancyRate", e.target.value)} placeholder="e.g. 95" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Units / Area</Label>
+                    <Input value={form.unitsOrArea} onChange={(e) => update("unitsOrArea", e.target.value)} placeholder="e.g. 12 units / 2,400 m²" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Exit Strategy / Hold Period</Label>
+                  <Input value={form.exitStrategy} onChange={(e) => update("exitStrategy", e.target.value)} placeholder="e.g. Reposition & sell in 3-5 years" />
+                </div>
+              </div>
+            )}
             <div className="space-y-2">
               <Label>Highlights (one per line)</Label>
               <Textarea value={form.highlights} onChange={(e) => update("highlights", e.target.value)} rows={3} placeholder={"Prime location\nHigh demand\nGuaranteed returns"} />
@@ -211,6 +326,17 @@ const UploadWizard = () => {
                 ["Category", form.category],
                 ["Min Investment", form.minInvestment ? `$${form.minInvestment}` : "—"],
                 ["Target Return", form.interestMin && form.interestMax ? `${form.interestMin}% – ${form.interestMax}%` : "—"],
+                ...(form.category === "buy" ? [
+                  ["Purchase Price", form.purchasePrice ? `$${form.purchasePrice}` : "—"],
+                  ["Estimated Yield", form.estimatedAnnualYield ? `${form.estimatedAnnualYield}%` : "—"],
+                  ["NOI", form.noi ? `$${form.noi}` : "—"],
+                  ["Occupancy", form.occupancyRate ? `${form.occupancyRate}%` : "—"],
+                  ["Units/Area", form.unitsOrArea || "—"],
+                  ["Address", form.propertyAddress || "—"],
+                  ["Asset Type", form.assetType || "—"],
+                  ["Year Built", form.yearBuilt || "—"],
+                  ["Exit Strategy", form.exitStrategy || "—"],
+                ] : []),
                 ["Term", form.termRange || "—"],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-border pb-2">
@@ -229,12 +355,12 @@ const UploadWizard = () => {
           <ArrowLeft size={16} className="mr-1" /> Back
         </Button>
         {step < steps.length - 1 ? (
-          <Button onClick={() => setStep(step + 1)}>
-            Next <ArrowRight size={16} className="ml-1" />
+          <Button onClick={() => setStep((cur) => cur + 1)} disabled={!validateStep(step)}>
+            Siguiente <ArrowRight size={16} className="ml-1" />
           </Button>
         ) : (
-          <Button onClick={handleSubmit}>
-            <Check size={16} className="mr-1" /> Submit Project
+          <Button onClick={() => { if (validateStep(step)) handleSubmit(); }} disabled={!validateStep(step)}>
+            <Check size={16} className="mr-1" /> Enviar proyecto
           </Button>
         )}
       </div>

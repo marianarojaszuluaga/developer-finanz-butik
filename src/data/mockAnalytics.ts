@@ -16,4 +16,41 @@ export const developerAnalytics = {
     { name: "Riviera Maya", raised: 850000, goal: 1000000, investors: 28 },
     { name: "Fondo Deuda Latam", raised: 620000, goal: 800000, investors: 25 },
   ],
+  buyOpportunities: {
+    overview: {
+      uniqueViews: 100,
+      returningVisitors: 25,
+      mostViewedUnitType: "Studio, 1 Bed 2 Bath",
+      requestInfoClicks: 10,
+      downloadClicks: 10,
+      scheduleRequests: 5,
+      closedSales: 20,
+      avgPriceRange: "$650,000 - $1.2M",
+    },
+    trafficTrend: [
+      { month: "Oct", visitors: 90 },
+      { month: "Nov", visitors: 115 },
+      { month: "Dec", visitors: 125 },
+      { month: "Jan", visitors: 140 },
+      { month: "Feb", visitors: 120 },
+      { month: "Mar", visitors: 135 },
+    ],
+    buyerLocations: [
+      { city: "Guadalajara", country: "MX", share: 35 },
+      { city: "Querétaro", country: "MX", share: 22 },
+      { city: "Monterrey", country: "MX", share: 18 },
+      { city: "Mexico City", country: "MX", share: 15 },
+      { city: "Miami", country: "US", share: 10 },
+    ],
+  },
+  sellOpportunities: {
+    overview: {
+      activeListings: 12,
+      totalViews: 450,
+      avgDaysOnMarket: 28,
+      closedDeals: 8,
+      totalVolume: 4200000,
+      avgSalePrice: 525000,
+    },
+  },
 };
